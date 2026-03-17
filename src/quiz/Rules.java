@@ -33,11 +33,10 @@ public class Rules extends JFrame implements ActionListener {
 		rules.setForeground(Color.BLACK);
 		add(rules);
 		rules.setText("<html>" + "1. Answer the question by selecting one of the 4 answer choices." + "<br><br>"
-				+ "2. Answer the question in less than and in-between  15 secondes." + "<br><br>"
-				+ "3. A question can be worth 10 points." + "<br><br>" + "4. A complete quiz consists of 10 questions.."
-				+ "<br><br>" + "5. Scores can be viewed at the end of the quiz." + "<br><br>"
-				+ "6. You have given lifeline for only 1 question." + "<br><br>"
-				+ "7. Click on Submit button to save yur data in databse." + "<br><br>"
+								+ "3. 2 question can be worth 10 points." + "<br><br>" + "3. A complete quiz consists of 20 questions.."
+				+ "<br><br>" + "4. Scores can be viewed at the end of the quiz." + "<br><br>"
+				+ "5. You have given lifeline for only 1 question." + "<br><br>"
+				+ "6. Click on Submit button to save yur data in databse." + "<br><br>"
 				+  "<html>");
 
 		back = new JButton("Back");

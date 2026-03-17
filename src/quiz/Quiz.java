@@ -28,7 +28,7 @@ public class Quiz extends JFrame implements ActionListener {
 
     public static int timer = 15;
     public static int ans_given = 0;
-    public static int count = 0;
+    public static int count = 0; 
     public static int score = 0;
     
     public static int attemptedQuestions = 0;
@@ -264,13 +264,15 @@ public class Quiz extends JFrame implements ActionListener {
         next.addActionListener(this);
         next.setForeground(Color.WHITE);
 
-        lifeline = new JButton("50-50 lifeline");
-        lifeline.setBounds(960, 510, 200, 40);
-        lifeline.setBackground(new Color(30, 144, 254));
-        lifeline.setFont(new Font("Tahoma", Font.PLAIN, 20));
-        add(lifeline);
-        lifeline.addActionListener(this);
-        lifeline.setForeground(Color.WHITE);
+		
+		  lifeline = new JButton("50-50 lifeline");
+		  lifeline.setBounds(960, 510, 200,40); 
+		  lifeline.setBackground(new Color(30, 144, 254)); 
+		  lifeline.setFont(new Font("Tahoma", Font.PLAIN, 20)); 
+		  add(lifeline);
+		  lifeline.addActionListener(this); 
+		  lifeline.setForeground(Color.WHITE);
+		 
 
         submit = new JButton("submit");
         submit.setBounds(960, 570, 200, 40);
@@ -285,67 +287,64 @@ public class Quiz extends JFrame implements ActionListener {
     }
 
     // Timer and paint method
+
     public void paint(Graphics g) {
         super.paint(g);
+        String time = "Time left = " + timer + " seconds";
 
-		/*
-		 * String time = "Time left = " + timer + " seconds";
-		 * 
-		 * g.setColor(Color.RED); g.setFont(new Font("Tahoma", Font.BOLD, 25));
-		 * 
-		 * if (timer > 0) { g.drawString(time, 880, 400); } else {
-		 * g.drawString("Time's up!!", 880, 400); }
-		 * 
-		 * timer--;
-		 * 
-		 * try { Thread.sleep(1000); repaint(); } catch (Exception e) {
-		 * System.out.println(e); }
-		 */
-        if (ans_given == 1) {
-            ans_given = 0;
-            timer = 15;
-        } else if (timer < 0) {
-            timer = 15;
+        g.setColor(Color.RED);
+        g.setFont(new Font("Tahoma", Font.BOLD, 25));
 
-            opt1.setEnabled(true);
-            opt2.setEnabled(true);
-            opt3.setEnabled(true);
-            opt4.setEnabled(true);
+        // Show the timer on the screen 
+        if (timer > 0) {
+            g.drawString(time, 880, 400);
+        } else {
+            g.drawString("Time's up!!", 880, 400);
+        }
 
-            if (count < 19) { 
-                if (group.getSelection() == null) {
-                    useranswers[count][0] = "";
-                } else {
-                    useranswers[count][0] = group.getSelection().getActionCommand();
-                }
+        timer--;
 
-                // Scoring
-                for (int i = 0; i < useranswers.length; i++) {
-                    if (useranswers[i][0].equals(answers[i][1])) {
-                        score += 10;
-                    } else {
-                        score -= 0;
-                    }
-                }
+        try {
+            Thread.sleep(1000); // Wait for 1 second before updating the timer
+            repaint(); // Call paint() again to update the screen
+        } catch(Exception e) {
+            System.out.println(e);
+        }
 
-                setVisible(false);
+        // If time is up and an answer hasn't been selected, handle the question transition
+        if (timer < 0) {
+            timer = 15;  // Reset timer for the next question
 
-                new Score(name, score, attemptedQuestions, correctAnswers, unattemptedQuestions); // Score
+            // Handle the user answer when time is up (if no answer is selected)
+            if (group.getSelection() == null) {
+                useranswers[count][0] = ""; // No answer selected
             } else {
-                if (group.getSelection() == null) {
-                    useranswers[count][0] = "";
-                } else {
-                    useranswers[count][0] = group.getSelection().getActionCommand();
-                }
+                useranswers[count][0] = group.getSelection().getActionCommand(); // Answer selected
+            }
 
-                count++;
-                start(count);
+            count++; // Increment to the next question
+
+            if (count < 20) {
+                start(count); // Move to the next question
+            } else {
+                // After last question, show score screen
+                setVisible(false);
+                new Score(name, score, attemptedQuestions, correctAnswers, unattemptedQuestions);  // Show final result
             }
         }
     }
 
+
+
     // Method to start each question
     public void start(int count) {
+        // Reset all options to enabled before displaying the next question
+        opt1.setEnabled(true);
+        opt2.setEnabled(true);
+        opt3.setEnabled(true);
+        opt4.setEnabled(true);
+
+        // Now set the question and options
         qno.setText("" + (count + 1) + ".");
         question.setText(questions[count][0]);
         opt1.setText(questions[count][1]);
@@ -360,8 +359,10 @@ public class Quiz extends JFrame implements ActionListener {
         opt4.setText(questions[count][4]);
         opt4.setActionCommand(questions[count][4]);
 
+        // Clear any previous selections
         group.clearSelection();
     }
+
 
     // Main method
     public static void main(String[] args) {
@@ -385,13 +386,12 @@ public class Quiz extends JFrame implements ActionListener {
             // Update the number of unattempted questions
             unattemptedQuestions = 20 - attemptedQuestions;
 
-           
             // Disable next button and enable submit on the second to last question
             if (count == 18) {
                 next.setEnabled(false);
                 submit.setEnabled(true);  // Enable submit button
             }
-
+            timer=15;
             count++;
             start(count);  // Move to the next question
         } else if (e.getSource() == submit) {
@@ -425,17 +425,37 @@ public class Quiz extends JFrame implements ActionListener {
             // Show final score screen
             setVisible(false);
             new Score(name, totalScore, attemptedQuestions, correctAnswers, unattemptedQuestions);  // Show final result
-        } else if (e.getSource() == lifeline) {
-            // Handle lifeline selection
+        } 
+        
+        
+        // LIFELINE BUTTON 
+        
+        
+        else if (e.getSource() == lifeline) {
+        	opt1.setEnabled(true);
+            opt2.setEnabled(true);
+            opt3.setEnabled(true);
+            opt4.setEnabled(true);
+
+            // Handle the lifeline logic
             if (count == 2 || count == 4 || count == 6 || count == 8 || count == 9) {
+                // Disable option 2 and 3 for these specific questions
                 opt2.setEnabled(false);
                 opt3.setEnabled(false);
             } else {
+                // Disable option 1 and 4 for all other questions
                 opt1.setEnabled(false);
                 opt4.setEnabled(false);
             }
-            lifeline.setEnabled(false);  // Disable lifeline after use
-        } else {
+
+            // Disable the lifeline button after it has been used
+            lifeline.setEnabled(false);
+        }
+
+
+        
+        
+        else {
             // Handle answer selection
             ans_given = 1;
 
@@ -446,6 +466,7 @@ public class Quiz extends JFrame implements ActionListener {
             }
 
             // Final score calculation
+            
             int score = 0;
             for (int i = 0; i < useranswers.length; i++) {
                 if (useranswers[i][0].equals(answers[i][1])) {
@@ -453,8 +474,8 @@ public class Quiz extends JFrame implements ActionListener {
                 }
             }
 
-            // Debugging: Print score so far
-        //    System.out.println("Score so far: " + score);
+         //    Print score 
+            System.out.println("Score so far: " + score);
             
             // Show results
             setVisible(false);
